@@ -54,6 +54,8 @@ func _ready() -> void:
 	add_child(sms_bg)
 	sms_l = G.label("", 30, Color(1, 1, 1))
 	sms_l.visible = false
+	sms_l.autowrap_mode = TextServer.AUTOWRAP_OFF
+	sms_l.clip_text = false
 	add_child(sms_l)
 	skip_l = G.label("skip ›", 22, Color(1, 1, 1, 0.5))
 	skip_l.position = Vector2(590, 1236)
@@ -185,15 +187,22 @@ func _sms(ln: Dictionary) -> void:
 	name_l.text = ""
 	text_l.text = ""
 	var mine: bool = ln["who"] == "Wren"
-	sms_l.text = ln["text"]
-	sms_l.add_theme_font_size_override("font_size", 30)
-	var w: float = clamp(ln["text"].length() * 17.0 + 60.0, 160.0, 560.0)
+	var msg: String = ln["text"]
+	var fs := 30
+	var font: Font = sms_l.get_theme_font("font")
+	var tw := font.get_string_size(msg, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+	while tw > 600.0 and fs > 18:
+		fs -= 2
+		tw = font.get_string_size(msg, HORIZONTAL_ALIGNMENT_LEFT, -1, fs).x
+	sms_l.add_theme_font_size_override("font_size", fs)
+	var w: float = clamp(tw + 44.0, 140.0, 660.0)
 	var x := 690.0 - w if mine else 30.0
 	sms_bg.color = Color(0.24, 0.44, 0.82, 0.95) if mine else Color(0.18, 0.2, 0.26, 0.95)
 	sms_bg.position = Vector2(x, 1040)
 	sms_bg.size = Vector2(w, 90)
-	sms_l.position = Vector2(x + 10, 1040)
-	sms_l.size = Vector2(w - 20, 90)
+	sms_l.size = Vector2(w, 90)
+	sms_l.position = Vector2(x, 1040)
+	sms_l.text = msg
 	sms_bg.visible = true
 	sms_l.visible = true
 	if not mine:

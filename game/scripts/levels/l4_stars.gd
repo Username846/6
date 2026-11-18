@@ -56,13 +56,27 @@ func setup() -> void:
 func _key(a: int, b: int) -> Vector2i:
 	return Vector2i(min(a, b), max(a, b))
 
-func nearest(p: Vector2, maxd := 36.0) -> int:
+func _is_target(i: int) -> bool:
+	if cur >= cons.size():
+		return false
+	for e in cons[cur]["edges"]:
+		if e.x == i or e.y == i:
+			return true
+	return false
+
+func nearest(p: Vector2, tr := 70.0) -> int:
+	## Stars of the current constellation snap from far away; others need a close touch.
 	var best := -1
-	var bd := maxd
+	var bd := INF
 	for i in stars.size():
 		var d: float = stars[i]["p"].distance_to(p)
-		if d < bd:
-			bd = d
+		var r := 22.0
+		if _is_target(i):
+			r = tr
+		elif secret_idx.has(i):
+			r = 40.0
+		if d < r and d / r < bd:
+			bd = d / r
 			best = i
 	return best
 
@@ -86,7 +100,7 @@ func on_press(p: Vector2) -> void:
 func on_drag(p: Vector2, _r: Vector2) -> void:
 	if chain < 0 or cur >= cons.size():
 		return
-	var n := nearest(p, 28.0)
+	var n := nearest(p, 48.0)
 	if n >= 0 and n != chain:
 		_try_edge(chain, n)
 		chain = n
@@ -124,8 +138,8 @@ func _try_edge(a: int, b: int) -> void:
 		bad_t = 0.5
 		mistakes += 1
 		G.sfx("bad", -14)
-		if mistakes % 3 == 0:
-			ghost_t = 2.0
+		if mistakes % 2 == 0:
+			ghost_t = 2.5
 
 func _draw() -> void:
 	grad_rect(Rect2(0, 0, 720, 1280), Color(0.01, 0.015, 0.05), Color(0.05, 0.07, 0.17))
