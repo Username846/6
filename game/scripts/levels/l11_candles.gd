@@ -16,14 +16,20 @@ var shield := -1
 var gusts := 0
 const WARN_TIME := 1.6
 const SWEEP_TIME := 1.8
-const POS := [Vector2(110, 830), Vector2(230, 900), Vector2(350, 840), Vector2(470, 910), Vector2(590, 850),
-	Vector2(150, 1010), Vector2(290, 1060), Vector2(430, 1030), Vector2(570, 1080), Vector2(240, 1170)]
+const POS := [Vector2(170, 870), Vector2(390, 1050), Vector2(590, 900)]
+const LOST := [["c6_i0_2", "Fold them slowly. Stay a while."],
+	["c8_i0_1", "Hey, it's me. It's been months. Are you okay? Call me back. Please."],
+	["x_dad_drunk", "Not now, kiddo. I can't... not tonight. I'll deal with it tomorrow."]]
+var out_count := 0
+var echo_text := ""
+var echo_t := 0.0
+var echo_pos := Vector2.ZERO
 const PHONE := Vector2(540, 810)
 const T_CALL := -99.0
 const T_END := -98.0
-const T_WALK := 2.5
-const T_FLY := 7.5
-const T_GONE := 10.2
+const T_WALK := 8.5
+const T_FLY := 13.5
+const T_GONE := 16.2
 var call_text := ""
 
 func setup() -> void:
@@ -50,6 +56,7 @@ func in_band(p: Vector2) -> bool:
 
 func tick(dt: float) -> void:
 	phone_msg -= dt
+	echo_t -= dt
 	# which candle is being shielded
 	shield = -1
 	if pressed:
@@ -107,8 +114,8 @@ func tick(dt: float) -> void:
 			if c["out"]:
 				continue
 			var p: Vector2 = c["p"]
-			if in_band(p) and absf(p.x - gx) < 130.0 and i != shield:
-				c["life"] -= gust_pow * dt * 1.4
+			if in_band(p) and absf(p.x - gx) < 130.0:
+				c["life"] -= gust_pow * dt * (1.0 if i != shield else 0.4)
 		if gust >= 1.0:
 			gust = -1.0
 			gusts += 1
@@ -119,17 +126,23 @@ func tick(dt: float) -> void:
 		wind_snd.volume_db = lerpf(wind_snd.volume_db, -24.0, dt)
 	for c in candles:
 		if not c["out"]:
-			c["life"] -= dt * 0.004
+			c["life"] -= dt * 0.006
 			if c["life"] <= 0:
 				c["out"] = true
 				G.sfx("puff", -4)
+				var lost: Array = LOST[min(out_count, LOST.size() - 1)]
+				out_count += 1
+				G.play_voice(lost[0])
+				echo_text = lost[1]
+				echo_t = 6.0
+				echo_pos = c["p"]
 
 func on_press(p: Vector2) -> void:
 	pass
 
 func _draw() -> void:
 	var n := lit()
-	var amb: float = n / 10.0
+	var amb: float = n / float(POS.size())
 	grad_rect(Rect2(0, 0, 720, 1280), Color(0.012, 0.012, 0.016), Color(0.025, 0.02, 0.018))
 	# window (where the wind comes from)
 	var wr := Rect2(470, 230, 220, 360)
@@ -160,7 +173,7 @@ func _draw() -> void:
 		draw_rect(Rect2(p - Vector2(10, 38), Vector2(20, 40)), Color(0.85, 0.8, 0.68).darkened(0.65 - amb * 0.45))
 		if not c["out"]:
 			var l: float = clampf(c["life"], 0.0, 1.0)
-			var hit: bool = gust >= 0 and in_band(p) and absf(p.x - gust_x()) < 130.0 and i != shield
+			var hit: bool = gust >= 0 and in_band(p) and absf(p.x - gust_x()) < 130.0
 			var flick := 0.8 + 0.2 * sin(t * 13.0 + c["ph"])
 			if hit:
 				flick = 0.5 + 0.5 * absf(sin(t * 40.0 + c["ph"]))
@@ -182,6 +195,9 @@ func _draw() -> void:
 			var hp := sp + Vector2(side * 40, -6)
 			draw_colored_polygon(PackedVector2Array([hp + Vector2(0, -44), hp + Vector2(side * 16, -30), hp + Vector2(side * 18, 30), hp + Vector2(0, 40), hp + Vector2(-side * 8, 0)]), Color(0.08, 0.05, 0.04))
 			draw_line(hp + Vector2(-side * 6, -40), hp + Vector2(-side * 8, 30), Color(1, 0.65, 0.3, 0.6), 2)
+	# a voice from someone who isn't here anymore
+	if echo_t > 0:
+		text(Vector2(40, echo_pos.y - 120), echo_text, 22, Color(0.85, 0.82, 0.78, clampf(echo_t / 2.0, 0.0, 0.8)), HORIZONTAL_ALIGNMENT_CENTER, 640)
 	# phone
 	draw_rect(Rect2(PHONE - Vector2(14, 24), Vector2(28, 48)), Color(0.06, 0.06, 0.07))
 	if n == 0 and dark_t >= T_CALL and dark_t < T_END + 1.5:

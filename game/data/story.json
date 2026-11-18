@@ -649,7 +649,7 @@
      "lines": [
       {
        "who": "",
-       "text": "Calling Dad...",
+       "text": "",
        "sms": false,
        "voice": "",
        "sfx": "ring",
@@ -659,7 +659,7 @@
       },
       {
        "who": "",
-       "text": "Voicemail",
+       "text": "",
        "sms": false,
        "voice": "",
        "sfx": "vm_beep",
