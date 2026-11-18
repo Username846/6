@@ -648,10 +648,30 @@
      "img": "c11_room",
      "lines": [
       {
-       "who": "Wren",
-       "text": "Hello?",
+       "who": "",
+       "text": "Calling Dad...",
        "sms": false,
-       "voice": "c11_i0_0"
+       "voice": "",
+       "sfx": "ring",
+       "times": 3,
+       "every": 3.0,
+       "dur": 9.3
+      },
+      {
+       "who": "",
+       "text": "Voicemail",
+       "sms": false,
+       "voice": "",
+       "sfx": "vm_beep",
+       "times": 1,
+       "every": 1.0,
+       "dur": 1.4
+      },
+      {
+       "who": "Wren",
+       "text": "Dad? It's me. I... I need you. Please call me back.",
+       "sms": false,
+       "voice": "x_call"
       }
      ],
      "amb": "hum"

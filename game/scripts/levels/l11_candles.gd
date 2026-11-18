@@ -19,13 +19,11 @@ const SWEEP_TIME := 1.8
 const POS := [Vector2(110, 830), Vector2(230, 900), Vector2(350, 840), Vector2(470, 910), Vector2(590, 850),
 	Vector2(150, 1010), Vector2(290, 1060), Vector2(430, 1030), Vector2(570, 1080), Vector2(240, 1170)]
 const PHONE := Vector2(540, 810)
-const T_CALL := 1.5
-const T_BEEP := 10.5
-const T_MSG := 11.0
-const T_END := 17.0
-const T_WALK := 17.8
-const T_FLY := 22.5
-const T_GONE := 25.2
+const T_CALL := -99.0
+const T_END := -98.0
+const T_WALK := 2.5
+const T_FLY := 7.5
+const T_GONE := 10.2
 var call_text := ""
 
 func setup() -> void:
@@ -72,18 +70,6 @@ func tick(dt: float) -> void:
 		if before == 0.0:
 			var tw := create_tween()
 			tw.tween_property(G.music, "volume_db", -18.0, 2.0)
-		for rt in [T_CALL, T_CALL + 3.0, T_CALL + 6.0]:
-			if before < rt and dark_t >= rt:
-				G.sfx("ring", -4)
-				call_text = "Calling Dad..."
-		if before < T_BEEP and dark_t >= T_BEEP:
-			G.sfx("vm_beep", -8)
-			call_text = "Dad — voicemail"
-		if before < T_MSG and dark_t >= T_MSG:
-			G.play_voice("x_call")
-			hint("Dad? It's me. I... I need you.\nPlease call me back.", 6.0)
-		if before < T_END and dark_t >= T_END:
-			call_text = "Call ended"
 		if before < T_FLY and dark_t >= T_FLY:
 			G.play_voice("x_fly")
 			hint("Fly away, little wren.", 2.6)

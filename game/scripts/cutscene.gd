@@ -170,17 +170,24 @@ func _panel(p: Dictionary) -> void:
 
 func _caption(ln: Dictionary) -> void:
 	box.visible = false
-	var c := G.label(ln["text"], 40, Color(0.85, 0.85, 0.88))
-	c.position = Vector2(0, 560)
-	c.size = Vector2(720, 120)
+	var c := G.label(ln["text"], 34, Color(0.8, 0.86, 1.0))
+	c.position = Vector2(0, 380)
+	c.size = Vector2(720, 100)
 	c.modulate.a = 0.0
 	add_child(c)
 	var tw := create_tween()
-	tw.tween_property(c, "modulate:a", 1.0, 2.5)
-	await _wait(7.0)
-	var tw2 := create_tween()
-	tw2.tween_property(c, "modulate:a", 0.0, 1.5)
-	await tw2.finished
+	tw.tween_property(c, "modulate:a", 1.0, 0.6)
+	var dur: float = ln.get("dur", 7.0)
+	var times: int = int(ln.get("times", 0))
+	var every: float = ln.get("every", 1.0)
+	var w := 0.0
+	var played := 0
+	while w < dur and not skipping:
+		if ln.has("sfx") and played < times and w >= played * every:
+			G.sfx(ln["sfx"], -4)
+			played += 1
+		await get_tree().process_frame
+		w += get_process_delta_time()
 	c.queue_free()
 
 func _say(ln: Dictionary) -> void:
