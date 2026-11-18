@@ -59,6 +59,7 @@ func show_menu(keep_music := false) -> void:
 	var m = preload("res://scripts/menu.gd").new()
 	m.pick.connect(start_chapter)
 	m.back.connect(func(): show_title())
+	m.reload.connect(func(): show_menu(false))
 	_swap(m)
 	if not keep_music or G.song_id != "title":
 		G.play_song("title")
@@ -66,6 +67,8 @@ func show_menu(keep_music := false) -> void:
 	await G.fade_in(0.6)
 
 func start_chapter(i: int) -> void:
+	if i != 1:
+		G.cheat_count = 0
 	G.fade_song(0.8)
 	await G.fade_out(0.8)
 	var ch: Dictionary = G.chapter(i)
@@ -83,6 +86,7 @@ func start_chapter(i: int) -> void:
 	if not lv.emitted:
 		await lv.done
 	if lv.quit_requested:
+		G.cheat_count = G.cheat_count + 1 if i == 1 else 0
 		G.stop_song()
 		G.play_amb("")
 		G.voice.stop()
@@ -92,6 +96,7 @@ func start_chapter(i: int) -> void:
 	await G.fade_out(1.6)
 	await _cut(ch["outro"], i, false)
 	G.complete_chapter(i)
+	G.cheat_count = 0
 	if i == 10:
 		await show_credits()
 	elif i == 11:

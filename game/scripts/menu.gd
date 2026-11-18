@@ -1,11 +1,14 @@
 extends Control
 signal pick(i: int)
 signal back
+signal reload
 
 var t := 0.0
 var rows: Array = []
 var erase_armed := 0.0
 var erase_btn: Label
+var cheat_panel: Control = null
+var cheat_rows: Array = []
 
 func _ready() -> void:
 	size = Vector2(720, 1280)
@@ -56,6 +59,74 @@ func _ready() -> void:
 		erase_btn.position = Vector2(0, 1210)
 		erase_btn.size = Vector2(720, 50)
 		add_child(erase_btn)
+	if G.cheat_count >= 3:
+		G.cheat_count = 0
+		_open_cheats()
+
+func _cheat_options() -> Array:
+	return [
+		["Unlock all chapters", func():
+			G.unlocked = 10
+			G.after = false],
+		["Find all secrets", func():
+			for i in range(1, 11):
+				G.secrets[str(i)] = true],
+		["Unlock “After”", func():
+			for i in range(1, 11):
+				G.secrets[str(i)] = true
+				G.completed[str(i)] = true
+			G.unlocked = 10
+			G.after = false],
+		["Changed world: " + ("ON" if G.after else "OFF"), func():
+			G.after = not G.after],
+		["Level skip button: " + ("ON" if G.cheat_skip else "OFF"), func():
+			G.cheat_skip = not G.cheat_skip],
+		["Erase progress", func():
+			G.erase()],
+		["Close", func(): pass],
+	]
+
+func _open_cheats() -> void:
+	G.sfx("secret", -10)
+	cheat_panel = Control.new()
+	cheat_panel.size = Vector2(720, 1280)
+	cheat_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(cheat_panel)
+	var dim := ColorRect.new()
+	dim.color = Color(0, 0, 0, 0.82)
+	dim.size = Vector2(720, 1280)
+	dim.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	cheat_panel.add_child(dim)
+	var title := G.label("CHEATS", 44, Color(1, 0.85, 0.5))
+	title.position = Vector2(0, 200)
+	title.size = Vector2(720, 70)
+	cheat_panel.add_child(title)
+	var y := 320.0
+	for opt in _cheat_options():
+		var bg := ColorRect.new()
+		bg.color = Color(1, 1, 1, 0.08)
+		bg.position = Vector2(110, y)
+		bg.size = Vector2(500, 84)
+		bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		cheat_panel.add_child(bg)
+		var lb := G.label(opt[0], 30, Color(1, 1, 1, 0.9))
+		lb.position = bg.position
+		lb.size = bg.size
+		cheat_panel.add_child(lb)
+		cheat_rows.append([Rect2(bg.position, bg.size), opt[1], opt[0]])
+		y += 100.0
+
+func _pick_cheat(row: Array) -> void:
+	var f: Callable = row[1]
+	f.call()
+	G.save()
+	G.set_after_visuals()
+	G.sfx("ok", -8)
+	cheat_panel.queue_free()
+	cheat_panel = null
+	cheat_rows.clear()
+	if row[2] != "Close":
+		reload.emit()
 
 func _process(delta: float) -> void:
 	t += delta
@@ -70,6 +141,12 @@ func _input(e: InputEvent) -> void:
 	if not (e is InputEventMouseButton and e.pressed):
 		return
 	var p: Vector2 = e.position
+	if cheat_panel != null:
+		for cr in cheat_rows:
+			if cr[0].has_point(p):
+				_pick_cheat(cr)
+				return
+		return
 	for r in rows:
 		if Rect2(r.position, r.size).has_point(p):
 			if r.get_meta("open"):

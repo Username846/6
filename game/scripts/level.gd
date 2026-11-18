@@ -37,6 +37,17 @@ func _ready() -> void:
 	bbg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	ui.add_child(bbg)
 	ui.add_child(back)
+	if G.cheat_skip:
+		var sk := G.label("skip ›", 24, Color(1, 0.85, 0.5, 0.85))
+		sk.position = Vector2(602, 116)
+		sk.size = Vector2(110, 48)
+		var sbg := ColorRect.new()
+		sbg.color = Color(0, 0, 0, 0.45)
+		sbg.position = sk.position
+		sbg.size = sk.size
+		sbg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		ui.add_child(sbg)
+		ui.add_child(sk)
 	ui.add_child(obj_label)
 	hint_label = G.label("", 30, Color(1, 0.95, 0.85))
 	hint_label.position = Vector2(40, 900)
@@ -70,6 +81,10 @@ func _input(e: InputEvent) -> void:
 	if finished or G.fade_rect.color.a > 0.1:
 		return
 	if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+		if G.cheat_skip and Rect2(594, 112, 126, 56).has_point(make_input_local(e).position):
+			G.sfx("tap", -8)
+			finish(0.2)
+			return
 		if BACK_RECT.has_point(make_input_local(e).position):
 			quit_requested = true
 			finished = true
