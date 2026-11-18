@@ -9,9 +9,6 @@ var lines := [
 	["", 40],
 	["Made with Godot", 22],
 	["Music, voices and pictures generated for this game", 22],
-	["", 60],
-	["If you are struggling, you don't have to hold it alone.", 20],
-	["findahelpline.com", 20],
 ]
 var box: VBoxContainer
 var done := false
