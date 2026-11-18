@@ -35,7 +35,8 @@ func _test_level(i: int) -> void:
 	if i != 3:
 		G.play_song("c%d" % i)
 	await G.fade_in(0.3)
-	await lv.done
+	if not lv.emitted:
+		await lv.done
 	G.stop_song()
 	show_menu()
 
@@ -79,7 +80,8 @@ func start_chapter(i: int) -> void:
 	else:
 		G.play_song("c%d" % i)
 	await G.fade_in(0.8)
-	await lv.done
+	if not lv.emitted:
+		await lv.done
 	if lv.quit_requested:
 		G.stop_song()
 		G.play_amb("")

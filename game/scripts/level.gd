@@ -7,6 +7,7 @@ var chapter := 1
 var t := 0.0
 var finished := false
 var quit_requested := false
+var emitted := false
 const BACK_RECT := Rect2(0, 112, 126, 56)
 var pressed := false
 var press_pos := Vector2.ZERO
@@ -66,7 +67,7 @@ func tick(_delta: float) -> void:
 	pass
 
 func _input(e: InputEvent) -> void:
-	if finished:
+	if finished or G.fade_rect.color.a > 0.1:
 		return
 	if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
 		if BACK_RECT.has_point(make_input_local(e).position):
@@ -74,6 +75,7 @@ func _input(e: InputEvent) -> void:
 			finished = true
 			G.sfx("tap", -8)
 			get_viewport().set_input_as_handled()
+			emitted = true
 			done.emit()
 			return
 	if G.dev and e is InputEventKey and e.pressed:
@@ -113,6 +115,7 @@ func finish(delay := 1.5) -> void:
 		return
 	finished = true
 	await get_tree().create_timer(delay).timeout
+	emitted = true
 	done.emit()
 
 func secret() -> void:

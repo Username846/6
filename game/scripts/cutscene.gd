@@ -200,9 +200,10 @@ func _sms(ln: Dictionary) -> void:
 	sms_bg.color = Color(0.24, 0.44, 0.82, 0.95) if mine else Color(0.18, 0.2, 0.26, 0.95)
 	sms_bg.position = Vector2(x, 1040)
 	sms_bg.size = Vector2(w, 90)
+	sms_l.text = msg
+	sms_l.reset_size()
 	sms_l.size = Vector2(w, 90)
 	sms_l.position = Vector2(x, 1040)
-	sms_l.text = msg
 	sms_bg.visible = true
 	sms_l.visible = true
 	if not mine:
