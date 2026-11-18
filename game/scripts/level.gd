@@ -6,6 +6,8 @@ const FONT = preload("res://fonts/DejaVuSans.ttf")
 var chapter := 1
 var t := 0.0
 var finished := false
+var quit_requested := false
+const BACK_RECT := Rect2(0, 112, 126, 56)
 var pressed := false
 var press_pos := Vector2.ZERO
 var ptr := Vector2.ZERO
@@ -22,8 +24,18 @@ func _ready() -> void:
 	ui.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(ui)
 	obj_label = G.label("", 26, Color(1, 1, 1, 0.9))
-	obj_label.position = Vector2(20, 118)
-	obj_label.size = Vector2(680, 44)
+	obj_label.position = Vector2(130, 118)
+	obj_label.size = Vector2(460, 44)
+	var back := G.label("‹ menu", 24, Color(1, 1, 1, 0.75))
+	back.position = Vector2(8, 116)
+	back.size = Vector2(110, 48)
+	var bbg := ColorRect.new()
+	bbg.color = Color(0, 0, 0, 0.45)
+	bbg.position = back.position
+	bbg.size = back.size
+	bbg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	ui.add_child(bbg)
+	ui.add_child(back)
 	ui.add_child(obj_label)
 	hint_label = G.label("", 30, Color(1, 0.95, 0.85))
 	hint_label.position = Vector2(40, 900)
@@ -56,6 +68,14 @@ func tick(_delta: float) -> void:
 func _input(e: InputEvent) -> void:
 	if finished:
 		return
+	if e is InputEventMouseButton and e.pressed and e.button_index == MOUSE_BUTTON_LEFT:
+		if BACK_RECT.has_point(make_input_local(e).position):
+			quit_requested = true
+			finished = true
+			G.sfx("tap", -8)
+			get_viewport().set_input_as_handled()
+			done.emit()
+			return
 	if G.dev and e is InputEventKey and e.pressed:
 		if e.keycode == KEY_N:
 			finish(0.2)

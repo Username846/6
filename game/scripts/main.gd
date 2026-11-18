@@ -36,6 +36,7 @@ func _test_level(i: int) -> void:
 		G.play_song("c%d" % i)
 	await G.fade_in(0.3)
 	await lv.done
+	G.stop_song()
 	show_menu()
 
 func _swap(n: Node) -> void:
@@ -79,6 +80,12 @@ func start_chapter(i: int) -> void:
 		G.play_song("c%d" % i)
 	await G.fade_in(0.8)
 	await lv.done
+	if lv.quit_requested:
+		G.stop_song()
+		G.play_amb("")
+		G.voice.stop()
+		show_menu()
+		return
 	G.fade_song(2.0)
 	await G.fade_out(1.6)
 	await _cut(ch["outro"], i, false)
