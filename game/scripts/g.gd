@@ -15,6 +15,7 @@ var secrets := {}
 var after := false
 var ending_seen := false
 var cheat_skip := false
+var cheats_unlocked := false
 var cheat_count := 0
 
 # audio
@@ -111,6 +112,7 @@ func _load_save() -> void:
 	after = cf.get_value("p", "after", false)
 	ending_seen = cf.get_value("p", "ending_seen", false)
 	cheat_skip = cf.get_value("p", "cheat_skip", false)
+	cheats_unlocked = cf.get_value("p", "cheats_unlocked", false)
 
 func save() -> void:
 	var cf := ConfigFile.new()
@@ -120,6 +122,7 @@ func save() -> void:
 	cf.set_value("p", "after", after)
 	cf.set_value("p", "ending_seen", ending_seen)
 	cf.set_value("p", "cheat_skip", cheat_skip)
+	cf.set_value("p", "cheats_unlocked", cheats_unlocked)
 	cf.save(SAVE_PATH)
 
 func erase() -> void:

@@ -7,6 +7,9 @@ var t := 0.0
 var rows: Array = []
 var erase_armed := 0.0
 var erase_btn: Label
+var cheats_btn: Label
+const CHEATS_RECT := Rect2(10, 1200, 170, 64)
+const ERASE_RECT := Rect2(220, 1200, 280, 64)
 var cheat_panel: Control = null
 var cheat_rows: Array = []
 var top_taps := 0
@@ -56,6 +59,11 @@ func _ready() -> void:
 		erase_btn.position = Vector2(0, 1210)
 		erase_btn.size = Vector2(720, 50)
 		add_child(erase_btn)
+	if G.cheats_unlocked:
+		cheats_btn = G.label("cheats", 22, Color(1, 0.85, 0.5, 0.55))
+		cheats_btn.position = CHEATS_RECT.position + Vector2(0, 8)
+		cheats_btn.size = Vector2(CHEATS_RECT.size.x, 48)
+		add_child(cheats_btn)
 
 func _cheat_options() -> Array:
 	return [
@@ -68,10 +76,16 @@ func _cheat_options() -> Array:
 			G.cheat_skip = not G.cheat_skip],
 		["Erase progress", func():
 			G.erase()],
+		["Erase progress + lock cheats", func():
+			G.erase()
+			G.cheats_unlocked = false
+			G.cheat_skip = false],
 		["Close", func(): pass],
 	]
 
 func _open_cheats() -> void:
+	G.cheats_unlocked = true
+	G.save()
 	G.sfx("secret", -10)
 	cheat_panel = Control.new()
 	cheat_panel.size = Vector2(720, 1280)
@@ -156,7 +170,10 @@ func _input(e: InputEvent) -> void:
 			else:
 				G.sfx("tap", -12, 0.7)
 			return
-	if erase_btn and p.y > 1200:
+	if cheats_btn and CHEATS_RECT.has_point(p):
+		_open_cheats()
+		return
+	if erase_btn and ERASE_RECT.has_point(p):
 		if erase_armed > 0:
 			G.erase()
 			G.sfx("bad", -10)

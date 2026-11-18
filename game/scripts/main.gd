@@ -133,6 +133,7 @@ func show_credits() -> void:
 	await c.finished
 	G.play_amb("")
 	G.ending_seen = true
+	G.cheats_unlocked = true
 	G.save()
 	await G.fade_out(1.0)
 
