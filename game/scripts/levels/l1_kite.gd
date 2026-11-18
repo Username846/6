@@ -15,8 +15,6 @@ const BAND_NEED := 7.0
 var drafts: Array = []
 var gulls: Array = []
 var clouds: Array = []
-var star := Vector2(560, 575)
-var star_found := false
 var trail: Array = []
 
 func setup() -> void:
@@ -95,10 +93,6 @@ func tick(dt: float) -> void:
 					finish(3.0)
 	if band_i < bands.size():
 		objective("Hold the kite in the golden band  %d/3" % (band_i + 1))
-	# secret
-	if not star_found and abs(kx - star.x) < 42 and abs(alt - star.y) < 14:
-		star_found = true
-		secret()
 	trail.push_front(Vector2(kx, alt))
 	if trail.size() > 24:
 		trail.pop_back()
@@ -125,12 +119,6 @@ func _draw() -> void:
 		for i in 60:
 			var p := Vector2(r2.randf() * 720, r2.randf() * 1280)
 			draw_circle(p, r2.randf_range(0.6, 1.6), Color(1, 1, 1, (k - 0.55) * 1.6 * r2.randf()))
-	# the star
-	var sp := Vector2(star.x, sy(star.y))
-	if sp.y > -50 and sp.y < 1330:
-		var tw := 0.6 + 0.4 * sin(t * 3.0)
-		glow(sp, 46, Color(1, 0.97, 0.85, (0.5 if not star_found else 1.0) * tw))
-		draw_circle(sp, 3.5, Color(1, 1, 0.95, 0.9))
 	# drafts (shimmer)
 	for d in drafts:
 		var y0 := sy(d["a1"])

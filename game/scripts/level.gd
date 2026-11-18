@@ -96,8 +96,6 @@ func _input(e: InputEvent) -> void:
 	if G.dev and e is InputEventKey and e.pressed:
 		if e.keycode == KEY_N:
 			finish(0.2)
-		elif e.keycode == KEY_S:
-			secret()
 		return
 	if e is InputEventMouseButton and e.button_index == MOUSE_BUTTON_LEFT:
 		var le := make_input_local(e)
@@ -134,7 +132,7 @@ func finish(delay := 1.5) -> void:
 	done.emit()
 
 func secret() -> void:
-	G.find_secret(chapter)
+	pass
 
 # ---------------- drawing helpers ----------------
 func grad_rect(r: Rect2, top: Color, bot: Color) -> void:

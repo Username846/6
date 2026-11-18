@@ -98,7 +98,7 @@ func all_secrets() -> bool:
 	return true
 
 func chapter11_open() -> bool:
-	return all_secrets() and completed.get("10", false) and not after
+	return completed.get("10", false) and not after
 
 # ---------------------------------------------------------------- save
 func _load_save() -> void:

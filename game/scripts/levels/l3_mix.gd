@@ -68,6 +68,12 @@ func tick(dt: float) -> void:
 	for i in 4:
 		var w := sin(wob * 2.1 + i * 1.7) * 0.1
 		target[i] = lerp(float(target[i]), clamp(base[i] + w, 0.12, 0.92), dt * 2.0)
+		if G.after and i == 0:
+			# Wren's voice is gone
+			val[i] = 0.0
+			target[i] = 0.0
+			G.stems[i].volume_db = -80.0
+			continue
 		G.stems[i].volume_db = linear_to_db(max(val[i], 0.0005)) + 2.0
 	# mix quality
 	outs = 0
@@ -84,7 +90,7 @@ func tick(dt: float) -> void:
 	if not finished:
 		next_squeal -= dt
 		if squeal < 0 and next_squeal <= 0 and sec != "bridge":
-			squeal = rng.randi() % 4
+			squeal = (1 + rng.randi() % 3) if G.after else rng.randi() % 4
 			squeal_t = 2.0
 			squeal_snd.play()
 		if squeal >= 0:
@@ -118,10 +124,6 @@ func on_press(p: Vector2) -> void:
 		return
 	if failing > 0:
 		return
-	if not phone_found and phone_window(G.song_time()) and p.distance_to(BAG) < 50:
-		phone_found = true
-		secret()
-		return
 	for i in 4:
 		if abs(p.x - FX[i]) < 70 and p.y > TOP - 40 and p.y < BOT + 40:
 			grab = i
@@ -129,6 +131,8 @@ func on_press(p: Vector2) -> void:
 			return
 
 func on_drag(p: Vector2, _r: Vector2) -> void:
+	if grab == 0 and G.after:
+		return
 	if grab >= 0:
 		val[grab] = clamp((BOT - p.y) / (BOT - TOP), 0.0, 1.0)
 
@@ -159,13 +163,6 @@ func _draw() -> void:
 			var y := 470.0 + row * 44 - jump
 			draw_circle(Vector2(x, y), 20, Color(0.01, 0.01, 0.015))
 			draw_rect(Rect2(x - 28, y + 14, 56, 120), Color(0.01, 0.01, 0.015))
-	# Wren's bag at the edge of the stage
-	draw_rect(Rect2(BAG - Vector2(22, 12), Vector2(44, 22)), Color(0.04, 0.035, 0.04))
-	var st2 := G.song_time()
-	if phone_found or (failing <= 0 and phone_window(st2) and fmod(st2, 1.6) < 0.45):
-		var jig := Vector2(sin(t * 60.0) * 1.2, 0) if not phone_found else Vector2.ZERO
-		glow(BAG + Vector2(0, -6) + jig, 30 if not phone_found else 56, Color(0.6, 0.75, 1, 0.8))
-		draw_rect(Rect2(BAG + Vector2(-5, -14) + jig, Vector2(10, 6)), Color(0.75, 0.85, 1, 0.9))
 	# desk
 	grad_rect(Rect2(0, 600, 720, 680), Color(0.16, 0.16, 0.18), Color(0.08, 0.08, 0.09))
 	bar(Rect2(60, 610, 600, 10), crowd, Color(1, 0.75, 0.3))
@@ -173,7 +170,8 @@ func _draw() -> void:
 		var x: float = FX[i]
 		var tg: float = target[i]
 		var zone := Rect2(x - 34, BOT - (tg + 0.1) * (BOT - TOP), 68, 0.2 * (BOT - TOP))
-		draw_rect(zone, Color(0.4, 1, 0.6, 0.16))
+		if not (G.after and i == 0):
+			draw_rect(zone, Color(0.4, 1, 0.6, 0.16))
 		draw_rect(Rect2(x - 4, TOP, 8, BOT - TOP), Color(0.02, 0.02, 0.02))
 		for k in 11:
 			var yy := TOP + k * (BOT - TOP) / 10.0

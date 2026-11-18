@@ -17,7 +17,6 @@ var dog_t := 0.0
 var trees: Array = []
 var roses_said := false
 var total := 0
-var jar_found := false
 var mower_snd: AudioStreamPlayer
 const LAWN_TIME := 58.0
 
@@ -66,7 +65,6 @@ func load_lawn(i: int) -> void:
 		2:
 			rect(17, 0, 21, 6, 2)      # shed
 			rect(22, 0, 23, 20, 2)     # hedge
-			rect(22, 2, 23, 9, 4)      # passable gap behind the shed (looks like hedge)
 			rect(2, 14, 8, 15, 3)
 			rect(10, 24, 12, 26, 2)
 			trees.append(Vector2(11.5, 25.5))
@@ -135,10 +133,6 @@ func tick(dt: float) -> void:
 						roses_said = true
 						G.play_voice("x_roses")
 						timer -= 4.0
-	# secret: the far end of the gap behind the shed
-	if lawn == 2 and not jar_found and mp.distance_to(Vector2(23 * CS, OY + 2.6 * CS)) < 26:
-		jar_found = true
-		secret()
 	# dog
 	dog_t -= dt
 	if dog_t <= 0:
@@ -194,12 +188,6 @@ func _draw() -> void:
 		draw_rect(Rect2(17 * CS + 4, OY, 5 * CS - 8, 7 * CS - 4), Color(0.45, 0.32, 0.22))
 		for i in 6:
 			draw_line(Vector2(17 * CS + 4 + i * 24, OY), Vector2(17 * CS + 4 + i * 24, OY + 7 * CS - 4), Color(0.35, 0.24, 0.16), 2)
-		if jar_found:
-			var jp := Vector2(23 * CS, OY + 2.6 * CS)
-			glow(jp, 60, Color(0.85, 1, 0.5, 0.9))
-			draw_rect(Rect2(jp - Vector2(9, 12), Vector2(18, 24)), Color(0.8, 0.95, 1, 0.5))
-			for i in 4:
-				draw_circle(jp + Vector2(sin(t * 3 + i) * 5, cos(t * 2.3 + i * 2) * 7), 2.2, Color(0.95, 1, 0.6))
 	for tr in trees:
 		var tp := Vector2(tr.x * CS, OY + tr.y * CS)
 		draw_circle(tp + Vector2(10, 14), 92, Color(0, 0, 0, 0.18))

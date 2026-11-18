@@ -66,7 +66,7 @@ func tick(dt: float) -> void:
 		hint("%d AM. New rule." % (hour + 1), 2.5)
 		spawn_t = 2.2
 	if spawn_t <= 0 and spawned < (hour + 1) * per_hour:
-		var w := hour == 3 and spawned == per_hour * 3 + 5 and not w_spawned
+		var w := false
 		var p := {"pos": Vector2(360, 230), "c": rng.randi() % 3, "s": rng.randi() % 3, "fragile": rng.randf() < 0.3,
 			"heavy": rng.randf() < 0.3, "w": w, "rot": rng.randf_range(-0.1, 0.1), "size": rng.randf_range(0.85, 1.15)}
 		if w:

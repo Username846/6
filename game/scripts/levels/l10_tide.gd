@@ -128,7 +128,7 @@ func _build(p: Vector2, dt: float) -> void:
 
 func on_release(p: Vector2) -> void:
 	if p.distance_to(press_pos) < 12 and not gone:
-		if p.distance_to(post + Vector2(0, 46)) < 36:
+		if false:
 			dig_taps += 1
 			G.sfx("tap", -14, 0.5)
 			if dig_taps >= 3 and not glass:

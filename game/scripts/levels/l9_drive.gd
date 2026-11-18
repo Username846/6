@@ -14,7 +14,7 @@ var spawn := 2.0
 var hit_t := 0.0
 var tap_t := 0.0
 var wiper := 0.0
-var exit_taken := false
+var exit_taken := true
 var rest_t := 0.0
 var awake_said := 0.0
 var engine: AudioStreamPlayer
@@ -114,7 +114,7 @@ func _draw() -> void:
 	for i in range(n, 0, -1):
 		var z0 := 0.4 + i * 1.5
 		var z1 := 0.4 + (i - 1) * 1.5
-		var wide := exit_open() or (miles > 29.5 and miles < 31.5)
+		var wide := false
 		var rw := 2.4 if wide else 1.6
 		var a0 := proj(-1.6, z0)
 		var b0 := proj(rw, z0)
@@ -130,7 +130,7 @@ func _draw() -> void:
 		draw_line(a0, a1, Color(0.9, 0.9, 0.85, 0.6), max(1.0, 6.0 / z1))
 		draw_line(proj(1.6, z0), proj(1.6, z1), Color(0.9, 0.9, 0.85, 0.6), max(1.0, 6.0 / z1))
 	# signs
-	if miles > 28.5 and miles < 30.2:
+	if false:
 		var zz := 40.0 - (miles - 28.5) * 24.0
 		if zz > 0.5:
 			var sp := proj(2.6, zz)

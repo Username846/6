@@ -47,11 +47,6 @@ func _ready() -> void:
 			age.position = Vector2(480, 0)
 			age.size = Vector2(70, 86)
 			row.add_child(age)
-		if G.has_secret(i) and not G.after:
-			var st := G.label("✦", 26, Color(1, 0.85, 0.5))
-			st.position = Vector2(545, 0)
-			st.size = Vector2(50, 86)
-			row.add_child(st)
 		row.set_meta("i", i)
 		row.set_meta("open", open)
 		rows.append(row)
@@ -67,12 +62,8 @@ func _cheat_options() -> Array:
 		["Unlock all chapters", func():
 			G.unlocked = 10
 			G.after = false],
-		["Find all secrets", func():
-			for i in range(1, 11):
-				G.secrets[str(i)] = true],
 		["Unlock “After”", func():
 			for i in range(1, 11):
-				G.secrets[str(i)] = true
 				G.completed[str(i)] = true
 			G.unlocked = 10
 			G.after = false],

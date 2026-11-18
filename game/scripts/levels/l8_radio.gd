@@ -37,7 +37,7 @@ func sig_of(s: Dictionary) -> float:
 	return clamp(1.0 - abs(freq - sf) / 0.45, 0.0, 1.0)
 
 func on_drag(_p: Vector2, r: Vector2) -> void:
-	freq = clamp(freq + r.x * 0.022, 85.4, 108.4)
+	freq = clamp(freq + r.x * 0.022, 87.5, 108.0)
 
 func tick(dt: float) -> void:
 	dawn = min(1.0, dawn + dt / 170.0)

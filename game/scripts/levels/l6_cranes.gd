@@ -21,7 +21,7 @@ var count := 0
 var shown_count := 0.0
 var paper_col := PAPERS[0]
 var gold := false
-var gold_found := false
+var gold_found := true
 var stack_open := 0.0
 var stack_drag := false
 var flying: Array = []
@@ -60,7 +60,7 @@ func on_press(p: Vector2) -> void:
 		return
 	var sp := Vector2(100, 1130)
 	if p.distance_to(sp) < 90 and step == 0:
-		stack_drag = true
+		pass
 
 func on_drag(p: Vector2, _r: Vector2) -> void:
 	if stack_drag:

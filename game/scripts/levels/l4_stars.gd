@@ -34,10 +34,6 @@ func setup() -> void:
 		for e in s[3]:
 			edges.append(_key(idx[e[0]], idx[e[1]]))
 		cons.append({"name": s[0], "edges": edges})
-	# secret faint triangle near bottom-left, not on any chart
-	for p in [Vector2(62, 1168), Vector2(118, 1132), Vector2(104, 1210)]:
-		secret_idx.append(stars.size())
-		stars.append({"p": p, "b": 0.5, "r": 3.2})
 	var tries := 0
 	while stars.size() < 150 and tries < 3000:
 		tries += 1
