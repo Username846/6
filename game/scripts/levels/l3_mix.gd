@@ -8,13 +8,14 @@ const BOT := 1160.0
 var val := [0.5, 0.5, 0.5, 0.5]
 var target := [0.5, 0.5, 0.5, 0.5]
 var grab := -1
-var crowd := 0.4
+var crowd := 0.6
 var squeal := -1
 var squeal_t := 0.0
 var next_squeal := 14.0
-var silent_t := 0.0
-var lighter := false
-var lighter_found := false
+var phone_found := false
+var failing := 0.0
+var outs := 0
+const BAG := Vector2(58, 392)
 var squeal_snd: AudioStreamPlayer
 var bar_len := 4.0 * 60.0 / 170.0
 var plan := [["intro", 2], ["verse", 16], ["pre", 8], ["chorus", 16], ["verse", 16], ["pre", 8], ["chorus", 16], ["bridge", 16], ["chorus", 16], ["chorus", 16], ["outro", 2]]
@@ -39,7 +40,27 @@ func section_at(time: float) -> String:
 		b -= p[1]
 	return "outro"
 
+func phone_window(st: float) -> bool:
+	var b := st / bar_len
+	return b >= 42.0 and b < 58.0
+
+func _restart() -> void:
+	failing = 0.0
+	crowd = 0.6
+	val = [0.5, 0.5, 0.5, 0.5]
+	grab = -1
+	_end_squeal()
+	next_squeal = 14.0
+	t = 0.0
+	G.play_song("c3", false, ["vocals", "guitar", "bass", "drums"])
+	hint("Again.", 2.0)
+
 func tick(dt: float) -> void:
+	if failing > 0:
+		failing -= dt
+		if failing <= 0:
+			_restart()
+		return
 	var st := G.song_time()
 	var sec := section_at(st)
 	var base: Array = TGT[sec]
@@ -47,22 +68,24 @@ func tick(dt: float) -> void:
 	for i in 4:
 		var w := sin(wob * 2.1 + i * 1.7) * 0.1
 		target[i] = lerp(float(target[i]), clamp(base[i] + w, 0.12, 0.92), dt * 2.0)
-		if i != grab:
-			val[i] = clamp(val[i] + sin(t * (0.6 + i * 0.27) + i * 4.0) * dt * 0.05 - dt * 0.012, 0.0, 1.0)
 		G.stems[i].volume_db = linear_to_db(max(val[i], 0.0005)) + 2.0
 	# mix quality
-	var err := 0.0
+	outs = 0
 	for i in 4:
-		err += abs(val[i] - target[i])
-	err /= 4.0
-	var good := err < 0.11
-	crowd = clamp(crowd + (dt * 0.12 if good else -dt * 0.08), 0.0, 1.0)
+		if abs(val[i] - target[i]) > 0.1:
+			outs += 1
+	var good := outs == 0
+	if t > 4.0:
+		crowd = clamp(crowd + (dt * 0.08 if good else -dt * 0.055 * outs), 0.0, 1.0)
+	if crowd <= 0.0 and not finished:
+		_fail()
+		return
 	# feedback
 	if not finished:
 		next_squeal -= dt
 		if squeal < 0 and next_squeal <= 0 and sec != "bridge":
 			squeal = rng.randi() % 4
-			squeal_t = 3.0
+			squeal_t = 2.0
 			squeal_snd.play()
 		if squeal >= 0:
 			squeal_t -= dt
@@ -70,19 +93,18 @@ func tick(dt: float) -> void:
 			if squeal_t <= 0:
 				crowd = max(0.0, crowd - 0.25)
 				_end_squeal()
-	# secret: silence the whole room during the bridge
-	if sec == "bridge" and not lighter_found:
-		var all_down := true
-		for v in val:
-			if v > 0.03:
-				all_down = false
-		silent_t = silent_t + dt if all_down else 0.0
-		if silent_t > 2.5:
-			lighter = true
-	objective("Crowd" + ("  ▲" if good else "  ▼"))
+	objective("Crowd" + ("  ▲" if good else "  ▼".repeat(outs)))
 	if not finished and st >= G.song_len - 1.5:
 		objective("They want an encore.")
 		finish(1.0)
+
+func _fail() -> void:
+	failing = 3.0
+	G.stop_song()
+	_end_squeal()
+	G.sfx("bad", -4, 0.7)
+	objective("")
+	hint("They walked out.", 3.0)
 
 func _end_squeal() -> void:
 	squeal = -1
@@ -94,8 +116,10 @@ func on_press(p: Vector2) -> void:
 		G.sfx("tap", -4)
 		_end_squeal()
 		return
-	if lighter and not lighter_found and p.distance_to(Vector2(452, 470)) < 45:
-		lighter_found = true
+	if failing > 0:
+		return
+	if not phone_found and phone_window(G.song_time()) and p.distance_to(BAG) < 50:
+		phone_found = true
 		secret()
 		return
 	for i in 4:
@@ -135,11 +159,13 @@ func _draw() -> void:
 			var y := 470.0 + row * 44 - jump
 			draw_circle(Vector2(x, y), 20, Color(0.01, 0.01, 0.015))
 			draw_rect(Rect2(x - 28, y + 14, 56, 120), Color(0.01, 0.01, 0.015))
-	if lighter:
-		var lp := Vector2(452, 470)
-		glow(lp, 60, Color(1, 0.7, 0.3, 0.9))
-		draw_line(lp + Vector2(0, 10), lp + Vector2(0, 40), Color(0.05, 0.05, 0.05), 6)
-		draw_circle(lp + Vector2(sin(t * 7) * 1.5, 0), 6, Color(1, 0.85, 0.5))
+	# Wren's bag at the edge of the stage
+	draw_rect(Rect2(BAG - Vector2(22, 12), Vector2(44, 22)), Color(0.04, 0.035, 0.04))
+	var st2 := G.song_time()
+	if phone_found or (failing <= 0 and phone_window(st2) and fmod(st2, 1.6) < 0.45):
+		var jig := Vector2(sin(t * 60.0) * 1.2, 0) if not phone_found else Vector2.ZERO
+		glow(BAG + Vector2(0, -6) + jig, 30 if not phone_found else 56, Color(0.6, 0.75, 1, 0.8))
+		draw_rect(Rect2(BAG + Vector2(-5, -14) + jig, Vector2(10, 6)), Color(0.75, 0.85, 1, 0.9))
 	# desk
 	grad_rect(Rect2(0, 600, 720, 680), Color(0.16, 0.16, 0.18), Color(0.08, 0.08, 0.09))
 	bar(Rect2(60, 610, 600, 10), crowd, Color(1, 0.75, 0.3))
