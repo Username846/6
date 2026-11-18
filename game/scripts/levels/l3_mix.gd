@@ -15,6 +15,9 @@ var next_squeal := 14.0
 var phone_found := false
 var failing := 0.0
 var outs := 0
+var grace := 0.0
+var next_change := 16.0
+var flash := [0.0, 0.0, 0.0, 0.0]
 const BAG := Vector2(58, 392)
 var squeal_snd: AudioStreamPlayer
 var bar_len := 4.0 * 60.0 / 170.0
@@ -45,6 +48,8 @@ func phone_window(st: float) -> bool:
 	return b >= 42.0 and b < 58.0
 
 func _restart() -> void:
+	target = [0.5, 0.5, 0.5, 0.5]
+	next_change = 16.0
 	failing = 0.0
 	crowd = 0.6
 	val = [0.5, 0.5, 0.5, 0.5]
@@ -55,6 +60,42 @@ func _restart() -> void:
 	G.play_song("c3", false, ["vocals", "guitar", "bass", "drums"])
 	hint("Again.", 2.0)
 
+## Difficulty ramps with the song: early on one fader moves every 32 beats,
+## by the end all four move every 8 beats.
+func _schedule(st: float) -> void:
+	var beat := st / (bar_len / 4.0)
+	if beat < next_change:
+		return
+	var p := clampf(st / maxf(1.0, G.song_len), 0.0, 1.0)
+	var count := 1
+	var every := 32.0
+	if p > 0.8:
+		count = 4
+		every = 8.0
+	elif p > 0.6:
+		count = 3
+		every = 12.0
+	elif p > 0.4:
+		count = 2
+		every = 16.0
+	elif p > 0.2:
+		count = 2 if rng.randf() < 0.5 else 1
+		every = 24.0
+	next_change = beat + every
+	var pool: Array = [0, 1, 2, 3]
+	if G.after:
+		pool.erase(0)
+	pool.shuffle()
+	for k in min(count, pool.size()):
+		var i: int = pool[k]
+		var nv := rng.randf_range(0.15, 0.9)
+		while absf(nv - float(target[i])) < 0.28:
+			nv = rng.randf_range(0.15, 0.9)
+		target[i] = nv
+		flash[i] = 0.6
+	grace = 0.7
+	G.sfx("tap", -16, 1.5)
+
 func tick(dt: float) -> void:
 	if failing > 0:
 		failing -= dt
@@ -63,11 +104,9 @@ func tick(dt: float) -> void:
 		return
 	var st := G.song_time()
 	var sec := section_at(st)
-	var base: Array = TGT[sec]
-	var wob := int(st / (bar_len * 8.0))
+	_schedule(st)
 	for i in 4:
-		var w := sin(wob * 2.1 + i * 1.7) * 0.1
-		target[i] = lerp(float(target[i]), clamp(base[i] + w, 0.12, 0.92), dt * 2.0)
+		flash[i] = maxf(0.0, flash[i] - dt)
 		if G.after and i == 0:
 			# Wren's voice is gone
 			val[i] = 0.0
@@ -81,8 +120,9 @@ func tick(dt: float) -> void:
 		if abs(val[i] - target[i]) > 0.1:
 			outs += 1
 	var good := outs == 0
-	if t > 4.0:
-		crowd = clamp(crowd + (dt * 0.08 if good else -dt * 0.055 * outs), 0.0, 1.0)
+	grace -= dt
+	if t > 4.0 and grace <= 0:
+		crowd = clamp(crowd + (dt * 0.1 if good else -dt * 0.045 * outs), 0.0, 1.0)
 	if crowd <= 0.0 and not finished:
 		_fail()
 		return
@@ -171,7 +211,7 @@ func _draw() -> void:
 		var tg: float = target[i]
 		var zone := Rect2(x - 34, BOT - (tg + 0.1) * (BOT - TOP), 68, 0.2 * (BOT - TOP))
 		if not (G.after and i == 0):
-			draw_rect(zone, Color(0.4, 1, 0.6, 0.16))
+			draw_rect(zone, Color(0.4, 1, 0.6, 0.16 + 0.5 * flash[i]))
 		draw_rect(Rect2(x - 4, TOP, 8, BOT - TOP), Color(0.02, 0.02, 0.02))
 		for k in 11:
 			var yy := TOP + k * (BOT - TOP) / 10.0
