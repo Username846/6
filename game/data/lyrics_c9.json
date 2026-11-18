@@ -1,0 +1,118 @@
+{
+"id": "c9",
+"name": "Stay Awake",
+"dur": 180.0,
+"bpm": 124,
+"lyrics": [
+{
+"t": 15.48,
+"e": 18.36,
+"text": "Highway nine, the lines are white"
+},
+{
+"t": 19.59,
+"e": 22.6,
+"text": "Headlights cutting up the night"
+},
+{
+"t": 23.22,
+"e": 26.1,
+"text": "Radio's too loud, I can't think"
+},
+{
+"t": 27.32,
+"e": 30.21,
+"text": "Eyes are heavy, I can't blink"
+},
+{
+"t": 30.86,
+"e": 33.83,
+"text": "Stay awake, stay awake"
+},
+{
+"t": 34.97,
+"e": 37.92,
+"text": "Stay awake, stay awake"
+},
+{
+"t": 38.65,
+"e": 42.06,
+"text": "She was driving up to see me"
+},
+{
+"t": 42.52,
+"e": 45.92,
+"text": "She was driving up to see me"
+},
+{
+"t": 69.68,
+"e": 72.84,
+"text": "Flowers taped against the rail"
+},
+{
+"t": 73.45,
+"e": 76.42,
+"text": "Someone's candle, someone's veil"
+},
+{
+"t": 77.57,
+"e": 80.91,
+"text": "Same road, same rain, same time"
+},
+{
+"t": 81.45,
+"e": 85.74,
+"text": "Tell me this road isn't mine"
+},
+{
+"t": 85.05,
+"e": 88.02,
+"text": "Stay awake, stay awake"
+},
+{
+"t": 89.16,
+"e": 92.12,
+"text": "Stay awake, stay awake"
+},
+{
+"t": 92.84,
+"e": 96.26,
+"text": "She was driving up to see me"
+},
+{
+"t": 96.71,
+"e": 100.12,
+"text": "She was driving up to see me"
+},
+{
+"t": 124.11,
+"e": 127.46,
+"text": "If I close my eyes"
+},
+{
+"t": 127.74,
+"e": 131.02,
+"text": "Will I see you"
+},
+{
+"t": 131.85,
+"e": 135.19,
+"text": "If I close my eyes"
+},
+{
+"t": 135.48,
+"e": 138.83,
+"text": "If I close my eyes"
+},
+{
+"t": 139.29,
+"e": 142.71,
+"text": "She was driving up to see me"
+},
+{
+"t": 143.17,
+"e": 146.57,
+"text": "She was driving up to see me"
+}
+]
+}

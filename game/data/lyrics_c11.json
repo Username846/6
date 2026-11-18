@@ -1,0 +1,68 @@
+{
+"id": "c11",
+"name": "Lullaby",
+"dur": 180.0,
+"bpm": 66,
+"lyrics": [
+{
+"t": 11.36,
+"e": 15.88,
+"text": "Hush now, little wren, the night is long"
+},
+{
+"t": 16.76,
+"e": 21.34,
+"text": "Close your eyes and I'll sing you a song"
+},
+{
+"t": 22.27,
+"e": 26.76,
+"text": "The lights go out one by one"
+},
+{
+"t": 27.72,
+"e": 32.25,
+"text": "But I'll be here when the night is done"
+},
+{
+"t": 44.09,
+"e": 48.61,
+"text": "Hush now, little wren, nobody's here"
+},
+{
+"t": 49.55,
+"e": 54.07,
+"text": "The phone won't ring and the sky's not clear"
+},
+{
+"t": 55.0,
+"e": 59.49,
+"text": "The lights go out one by one"
+},
+{
+"t": 59.99,
+"e": 64.52,
+"text": "And nobody's here when the night is done"
+},
+{
+"t": 76.36,
+"e": 80.81,
+"text": "Hush now, little wren"
+},
+{
+"t": 81.82,
+"e": 86.27,
+"text": "Hush now"
+},
+{
+"t": 87.73,
+"e": 92.18,
+"text": "The lights go out"
+},
+{
+"t": 93.18,
+"e": 97.65,
+"text": "One by one"
+}
+]
+}

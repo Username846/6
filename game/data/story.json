@@ -1,0 +1,705 @@
+{
+ "chapters": [
+  {
+   "id": 1,
+   "title": "Updraft",
+   "age": 15,
+   "song": "Higher Than the Gulls",
+   "intro": [
+    {
+     "img": "c1_beach",
+     "lines": [
+      {
+       "who": "Dad",
+       "text": "Wind's perfect. You ready, kiddo?",
+       "sms": false,
+       "voice": "c1_i0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "Born ready.",
+       "sms": false,
+       "voice": "c1_i0_1"
+      }
+     ],
+     "amb": "sea"
+    },
+    {
+     "img": "c1_june",
+     "lines": [
+      {
+       "who": "June",
+       "text": "Bet you lose it to the gulls again.",
+       "sms": false,
+       "voice": "c1_i1_0"
+      },
+      {
+       "who": "Wren",
+       "text": "Not this time. This time it goes all the way up.",
+       "sms": false,
+       "voice": "c1_i1_1"
+      }
+     ],
+     "amb": "sea"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c1_sunset",
+     "lines": [
+      {
+       "who": "Dad",
+       "text": "Look at that. Highest it's ever been.",
+       "sms": false,
+       "voice": "c1_o0_0"
+      },
+      {
+       "who": "June",
+       "text": "Same time next summer?",
+       "sms": false,
+       "voice": "c1_o0_1"
+      },
+      {
+       "who": "Wren",
+       "text": "Every summer. Forever.",
+       "sms": false,
+       "voice": "c1_o0_2"
+      }
+     ],
+     "amb": "sea"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "title": "Cut Grass",
+   "age": 16,
+   "song": "Lemonade Summer",
+   "intro": [
+    {
+     "img": "c2_lawn",
+     "lines": [
+      {
+       "who": "Mrs. Alder",
+       "text": "Five dollars a lawn. And mind my roses.",
+       "sms": false,
+       "voice": "c2_i0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "Guitar fund. Only forty lawns to go.",
+       "sms": false,
+       "voice": "c2_i0_1"
+      }
+     ],
+     "amb": "birds"
+    },
+    {
+     "img": "c2_kitchen",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "Dad? You're home early.",
+       "sms": false,
+       "voice": "c2_i1_0"
+      },
+      {
+       "who": "Dad",
+       "text": "Just a rough patch at work, kiddo. Nothing to worry about.",
+       "sms": false,
+       "voice": "c2_i1_1"
+      }
+     ],
+     "amb": "room"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c2_porch",
+     "lines": [
+      {
+       "who": "Mom",
+       "text": "He'll find something. He always does.",
+       "sms": false,
+       "voice": "c2_o0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "Sing the wren song?",
+       "sms": false,
+       "voice": "c2_o0_1"
+      },
+      {
+       "who": "Mom",
+       "text": "Hush now, little wren. The night is long.",
+       "sms": false,
+       "voice": "c2_o0_2"
+      }
+     ],
+     "amb": "crickets"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "title": "Feedback",
+   "age": 17,
+   "song": "Turn It Up",
+   "intro": [
+    {
+     "img": "c3_garage",
+     "lines": [
+      {
+       "who": "June",
+       "text": "Don't throw up on stage.",
+       "sms": false,
+       "voice": "c3_i0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "No promises.",
+       "sms": false,
+       "voice": "c3_i0_1"
+      },
+      {
+       "who": "Theo",
+       "text": "Guys. My strap just snapped.",
+       "sms": false,
+       "voice": "c3_i0_2"
+      }
+     ],
+     "amb": "room"
+    },
+    {
+     "img": "c3_stage",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "Hi. We're Paper Wings. This one's loud.",
+       "sms": false,
+       "voice": "c3_i1_0"
+      }
+     ],
+     "amb": "crowd"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c3_phone",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "Eleven missed calls?",
+       "sms": false,
+       "voice": "c3_o0_0"
+      },
+      {
+       "who": "Dad",
+       "text": "It's your mom. She collapsed. We're at Saint Mary's.",
+       "sms": false,
+       "voice": "c3_o0_1"
+      }
+     ],
+     "amb": "room"
+    },
+    {
+     "img": "c3_hall",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "I'm here. I'm here, Mom.",
+       "sms": false,
+       "voice": "c3_o1_0"
+      }
+     ],
+     "amb": "hum"
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "title": "Star Chart",
+   "age": 18,
+   "song": "Map of the Summer Sky",
+   "intro": [
+    {
+     "img": "c4_grad",
+     "lines": [
+      {
+       "who": "June",
+       "text": "I got in. Full scholarship.",
+       "sms": false,
+       "voice": "c4_i0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "June... that's amazing. That's really far.",
+       "sms": false,
+       "voice": "c4_i0_1"
+      }
+     ],
+     "amb": "crowd"
+    },
+    {
+     "img": "c4_roof",
+     "lines": [
+      {
+       "who": "June",
+       "text": "Promise you'll call every Sunday.",
+       "sms": false,
+       "voice": "c4_i1_0"
+      },
+      {
+       "who": "Wren",
+       "text": "Every Sunday.",
+       "sms": false,
+       "voice": "c4_i1_1"
+      },
+      {
+       "who": "June",
+       "text": "Name them with me. One last time.",
+       "sms": false,
+       "voice": "c4_i1_2"
+      }
+     ],
+     "amb": "crickets"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c4_car",
+     "lines": [
+      {
+       "who": "June",
+       "text": "Sunday! Don't you dare forget!",
+       "sms": false,
+       "voice": "c4_o0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "I won't.",
+       "sms": false,
+       "voice": "c4_o0_1"
+      }
+     ],
+     "amb": "birds"
+    },
+    {
+     "img": "c4_window",
+     "lines": [
+      {
+       "who": "Mom",
+       "text": "You could have gone too, you know.",
+       "sms": false,
+       "voice": "c4_o1_0"
+      },
+      {
+       "who": "Wren",
+       "text": "Someone has to stay.",
+       "sms": false,
+       "voice": "c4_o1_1"
+      }
+     ],
+     "amb": "room"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "title": "Night Shift",
+   "age": 19,
+   "song": "Neon Hours",
+   "intro": [
+    {
+     "img": "c5_warehouse",
+     "lines": [
+      {
+       "who": "Supervisor",
+       "text": "Rules change every hour. Keep up, or don't come back.",
+       "sms": false,
+       "voice": "c5_i0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "I'll keep up.",
+       "sms": false,
+       "voice": "c5_i0_1"
+      }
+     ],
+     "amb": "hum"
+    },
+    {
+     "img": "c5_bills",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "Eight hundred dollars. For one week.",
+       "sms": false,
+       "voice": "c5_i1_0"
+      },
+      {
+       "who": "June",
+       "text": "Missed call. Sunday, 7:02 PM.",
+       "sms": true,
+       "voice": ""
+      }
+     ],
+     "amb": "room"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c5_bus",
+     "lines": [
+      {
+       "who": "June",
+       "text": "missed you sunday. next week?",
+       "sms": true,
+       "voice": ""
+      },
+      {
+       "who": "Wren",
+       "text": "sorry. work.",
+       "sms": true,
+       "voice": ""
+      }
+     ],
+     "amb": "rain"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "title": "A Thousand Cranes",
+   "age": 20,
+   "song": "Paper Wings",
+   "intro": [
+    {
+     "img": "c6_hospital",
+     "lines": [
+      {
+       "who": "Mom",
+       "text": "Your grandmother used to say a thousand paper cranes buys one wish.",
+       "sms": false,
+       "voice": "c6_i0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "Then I'll fold a thousand.",
+       "sms": false,
+       "voice": "c6_i0_1"
+      },
+      {
+       "who": "Mom",
+       "text": "Fold them slowly. Stay a while.",
+       "sms": false,
+       "voice": "c6_i0_2"
+      }
+     ],
+     "amb": "beep"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c6_bed",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "Nine hundred and ninety-nine.",
+       "sms": false,
+       "voice": "c6_o0_0"
+      }
+     ],
+     "amb": "hum"
+    },
+    {
+     "img": "c6_funeral",
+     "lines": [
+      {
+       "who": "Dad",
+       "text": "I'm sorry, kiddo. I'm so sorry.",
+       "sms": false,
+       "voice": "c6_o1_0"
+      }
+     ],
+     "amb": "rain"
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "title": "Boxes",
+   "age": 21,
+   "song": "Everything Must Go",
+   "intro": [
+    {
+     "img": "c7_sold",
+     "lines": [
+      {
+       "who": "Dad",
+       "text": "My brother's got a room in Tucson. Just the one room.",
+       "sms": false,
+       "voice": "c7_i0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "So go.",
+       "sms": false,
+       "voice": "c7_i0_1"
+      },
+      {
+       "who": "Dad",
+       "text": "Wren...",
+       "sms": false,
+       "voice": "c7_i0_2"
+      },
+      {
+       "who": "Wren",
+       "text": "Just go, Dad.",
+       "sms": false,
+       "voice": "c7_i0_3"
+      }
+     ],
+     "amb": "birds"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c7_curb",
+     "lines": [],
+     "amb": "rain"
+    },
+    {
+     "img": "c7_bus",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "moving to the city. new number soon.",
+       "sms": true,
+       "voice": ""
+      },
+      {
+       "who": "Wren",
+       "text": "Delivered.",
+       "sms": true,
+       "voice": ""
+      }
+     ],
+     "amb": "rain"
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "title": "Static",
+   "age": 21,
+   "song": "Static",
+   "intro": [
+    {
+     "img": "c8_apartment",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "Can't sleep. Again.",
+       "sms": false,
+       "voice": "c8_i0_0"
+      },
+      {
+       "who": "June",
+       "text": "Hey, it's me. It's been months. Are you okay? Call me back. Please.",
+       "sms": false,
+       "voice": "c8_i0_1"
+      }
+     ],
+     "amb": "city"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c8_phone",
+     "lines": [
+      {
+       "who": "June",
+       "text": "I'm driving up Saturday. No arguments.",
+       "sms": true,
+       "voice": ""
+      },
+      {
+       "who": "Wren",
+       "text": "ok",
+       "sms": true,
+       "voice": ""
+      },
+      {
+       "who": "Wren",
+       "text": "Okay.",
+       "sms": false,
+       "voice": "c8_o0_2"
+      }
+     ],
+     "amb": "city"
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "title": "Highway Nine",
+   "age": 22,
+   "song": "Stay Awake",
+   "intro": [
+    {
+     "img": "c9_call",
+     "lines": [
+      {
+       "who": "Carol",
+       "text": "Wren? It's Carol. June's mom.",
+       "sms": false,
+       "voice": "c9_i0_0"
+      },
+      {
+       "who": "Carol",
+       "text": "There was an accident on Highway Nine. She was driving up to see you.",
+       "sms": false,
+       "voice": "c9_i0_1"
+      }
+     ],
+     "amb": "city"
+    },
+    {
+     "img": "c9_car",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "I have to go home.",
+       "sms": false,
+       "voice": "c9_i1_0"
+      }
+     ],
+     "amb": "rain"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c9_funeral",
+     "lines": [
+      {
+       "who": "Carol",
+       "text": "She talked about you every Sunday. Every single Sunday.",
+       "sms": false,
+       "voice": "c9_o0_0"
+      }
+     ],
+     "amb": "rain"
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "title": "Low Tide",
+   "age": 22,
+   "song": "The Water Always Wins",
+   "intro": [
+    {
+     "img": "c10_beach",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "Hey, June. I brought the kite.",
+       "sms": false,
+       "voice": "c10_i0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "No wind today.",
+       "sms": false,
+       "voice": "c10_i0_1"
+      }
+     ],
+     "amb": "sea"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c10_tide",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "There's nothing left to fly.",
+       "sms": false,
+       "voice": "c10_o0_0"
+      }
+     ],
+     "amb": "sea"
+    },
+    {
+     "img": "c10_end",
+     "lines": [],
+     "amb": "sea"
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "title": "After",
+   "age": 22,
+   "song": "Lullaby",
+   "intro": [
+    {
+     "img": "c11_room",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "Hello?",
+       "sms": false,
+       "voice": "c11_i0_0"
+      },
+      {
+       "who": "Wren",
+       "text": "No contacts.",
+       "sms": true,
+       "voice": ""
+      }
+     ],
+     "amb": "hum"
+    }
+   ],
+   "outro": [
+    {
+     "img": "c11_window",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "1 missed call. Unknown.",
+       "sms": true,
+       "voice": ""
+      }
+     ],
+     "amb": "wind"
+    }
+   ]
+  }
+ ],
+ "secrets": {
+  "1": "Even in daylight, some stars stay lit. You only see them if you go further than anyone asked.",
+  "2": "Kept things glow a little longer.",
+  "3": "In the quiet, someone was still holding up a light.",
+  "4": "Not every star is on the map. It is still there.",
+  "5": "Addressed to you. No return address.",
+  "6": "One wish, folded small enough to carry.",
+  "7": "Some things don't fit in any box. Keep them close.",
+  "8": "Somewhere, a frequency still remembers your name.",
+  "9": "You were allowed to stop. Nobody said it out loud.",
+  "10": "The sea took everything. It gave back one small thing."
+ },
+ "voices": {
+  "Wren": "en_US-hfc_female-medium",
+  "June": "en_US-kristin-medium",
+  "Dad": "en_US-ryan-high",
+  "Mom": "en_US-lessac-high",
+  "Mrs. Alder": "en_GB-southern_english_female-low",
+  "Theo": "en_US-bryce-medium",
+  "Supervisor": "en_US-john-medium",
+  "Carol": "en_US-ljspeech-high",
+  "Radio": "en_US-norman-medium"
+ }
+}
