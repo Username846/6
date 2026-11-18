@@ -365,7 +365,7 @@ func _process(delta: float) -> void:
 	_update_lyrics()
 
 func _update_lyrics() -> void:
-	var show := lyrics_visible and _song_playing and songs.has(song_id)
+	var show: bool = lyrics_visible and _song_playing and songs.has(song_id) and not songs[song_id]["lyrics"].is_empty()
 	lyric_layer.visible = show
 	if not show:
 		return

@@ -20,6 +20,23 @@ var advance := false
 var skipping := false
 var kb_from := Vector2.ZERO
 var kb_to := Vector2.ZERO
+var emerg: ColorRect
+var phone_mode := ""
+var phone_fx: PhoneGlow
+const PHONE_AT := Vector2(290, 1202)
+
+class PhoneGlow extends Control:
+	var a := 0.0
+	var at := Vector2.ZERO
+	func _draw() -> void:
+		if a <= 0.01:
+			return
+		for i in 10:
+			var k := 1.0 - float(i) / 10.0
+			draw_circle(at, 150.0 * k, Color(0.55, 0.7, 1.0, a * 0.12 * (1.0 - k * 0.5)))
+		draw_rect(Rect2(at - Vector2(40, 13), Vector2(80, 26)), Color(0.75, 0.85, 1.0, a))
+var emerg_on := false
+var siren: AudioStreamPlayer
 
 func _ready() -> void:
 	size = Vector2(720, 1280)
@@ -32,6 +49,18 @@ func _ready() -> void:
 	img.size = Vector2(720, 1280)
 	img.pivot_offset = Vector2(360, 640)
 	add_child(img)
+	emerg = ColorRect.new()
+	emerg.size = Vector2(720, 1280)
+	emerg.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	emerg.visible = false
+	add_child(emerg)
+	phone_fx = PhoneGlow.new()
+	phone_fx.size = Vector2(720, 1280)
+	phone_fx.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(phone_fx)
+	siren = G.loop_sfx("siren")
+	siren.volume_db = -17.0
+	add_child(siren)
 	box = ColorRect.new()
 	box.color = Color(0.02, 0.02, 0.03, 0.72)
 	box.position = Vector2(30, 1010)
@@ -69,6 +98,23 @@ func _process(delta: float) -> void:
 	var k: float = clamp(panel_t / 14.0, 0.0, 1.0)
 	img.scale = Vector2.ONE * (1.04 + 0.05 * k)
 	img.position = kb_from.lerp(kb_to, k)
+	if emerg_on:
+		# emergency lights sweeping in through the window, alternating red and blue
+		var ph := fmod(t * 1.6, 1.0)
+		var red := ph < 0.5
+		var pulse := pow(sin(fmod(ph, 0.5) * 2.0 * PI), 2.0)
+		var c := Color(1.0, 0.1, 0.12) if red else Color(0.15, 0.35, 1.0)
+		c.a = 0.015 + 0.075 * pulse
+		emerg.color = c
+	# the phone on the floor lighting up
+	var target := 0.0
+	if phone_mode == "ring":
+		target = 0.45 + 0.55 * absf(sin(t * 5.0))
+	elif phone_mode == "on":
+		target = 0.75
+	phone_fx.a = lerpf(phone_fx.a, target, minf(1.0, delta * 8.0))
+	phone_fx.at = img.position + (PHONE_AT - img.pivot_offset) * img.scale + img.pivot_offset
+	phone_fx.queue_redraw()
 	if typing >= 0.0 and full_text != "":
 		typing += delta * 38.0
 		var n := int(typing)
@@ -141,6 +187,12 @@ func _panel(p: Dictionary) -> void:
 	kb_to = Vector2(r.randf_range(-18, 18), r.randf_range(-24, 24))
 	img.modulate.a = 0.0
 	G.play_amb(p.get("amb", ""))
+	emerg_on = p.get("fx", "") == "emergency"
+	emerg.visible = emerg_on
+	if emerg_on:
+		siren.play()
+	else:
+		siren.stop()
 	var tw := create_tween()
 	tw.tween_property(img, "modulate:a", 1.0, 0.9)
 	await _wait(1.0)
@@ -151,12 +203,14 @@ func _panel(p: Dictionary) -> void:
 		if G.after and ln["who"] == "Wren":
 			continue
 		shown += 1
+		phone_mode = ln.get("phone", "")
 		if ln["who"] == "":
 			await _caption(ln)
 		elif ln["sms"]:
 			await _sms(ln)
 		else:
 			await _say(ln)
+	phone_mode = ""
 	box.visible = false
 	name_l.text = ""
 	text_l.text = ""

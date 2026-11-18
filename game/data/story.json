@@ -590,6 +590,30 @@
       }
      ],
      "amb": "rain"
+    },
+    {
+     "img": "c9_dadcall",
+     "amb": "rain",
+     "lines": [
+      {
+       "who": "Wren",
+       "text": "Dad? It's me. June's... June is gone.",
+       "sms": false,
+       "voice": "x_june_gone"
+      }
+     ]
+    },
+    {
+     "img": "c9_dad",
+     "amb": "room",
+     "lines": [
+      {
+       "who": "Dad",
+       "text": "Not now, kiddo. I can't... not tonight. I'll deal with it tomorrow.",
+       "sms": false,
+       "voice": "x_dad_drunk"
+      }
+     ]
     }
    ]
   },
@@ -681,18 +705,43 @@
     {
      "img": "c11_window",
      "amb": "wind",
+     "fx": "emergency",
      "lines": [
       {
-       "who": "Dad",
-       "text": "Missed call. 11:48 PM.",
-       "sms": true,
-       "voice": ""
+       "who": "",
+       "text": "",
+       "sms": false,
+       "voice": "",
+       "sfx": "phone_ring",
+       "times": 4,
+       "every": 3.0,
+       "dur": 11.6,
+       "phone": "ring"
+      },
+      {
+       "who": "Wren (voicemail greeting)",
+       "text": "Hey, it's Wren! I can't get to the phone right now. Leave a message and I'll call you back!",
+       "sms": false,
+       "voice": "x_greeting",
+       "phone": "on"
+      },
+      {
+       "who": "",
+       "text": "",
+       "sms": false,
+       "voice": "",
+       "sfx": "vm_beep",
+       "times": 1,
+       "every": 1.0,
+       "dur": 1.2,
+       "phone": "on"
       },
       {
        "who": "Dad (voicemail)",
        "text": "Hey, kiddo. It's Dad. Sorry I missed you. Things have been... hard. At work. Real hard. I've been, uh... I'll call you tomorrow. Okay? I'm sorry. I love you, kiddo.",
        "sms": false,
-       "voice": "c11_vm"
+       "voice": "c11_vm",
+       "phone": "on"
       }
      ]
     }

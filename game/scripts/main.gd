@@ -12,7 +12,6 @@ const LEVELS := {
 	8: "res://scripts/levels/l8_radio.gd",
 	9: "res://scripts/levels/l9_drive.gd",
 	10: "res://scripts/levels/l10_tide.gd",
-	11: "res://scripts/levels/l11_candles.gd",
 }
 
 var current: Node = null
@@ -94,11 +93,26 @@ func start_chapter(i: int) -> void:
 	await _cut(ch["outro"], i, false)
 	G.complete_chapter(i)
 	if i == 10:
+		if not G.after:
+			await _after_sequence()
+			return
 		await show_credits()
-	elif i == 11:
-		await show_after_turn()
-		return
 	show_menu()
+
+## What happens after the last chapter: cutscenes and a scene you only watch.
+func _after_sequence() -> void:
+	var ch: Dictionary = G.chapter(11)
+	G.play_song("c11", false)
+	await _cut(ch["intro"], 11, false)
+	G.lyrics_visible = false
+	var a = preload("res://scripts/after_scene.gd").new()
+	_swap(a)
+	await G.fade_in(1.2)
+	await a.finished
+	G.stop_song()
+	await _cut(ch["outro"], 11, false)
+	await show_credits()
+	await show_after_turn()
 
 func _cut(panels: Array, i: int, intro: bool) -> void:
 	var c = preload("res://scripts/cutscene.gd").new()

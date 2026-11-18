@@ -20,7 +20,7 @@ func _ready() -> void:
 	bg.modulate = Color(0.35, 0.35, 0.4)
 	add_child(bg)
 	var y := 170.0
-	var n := 11 if (G.chapter11_open() or G.after) else 10
+	var n := 10
 	for i in range(1, n + 1):
 		var ch: Dictionary = G.chapter(i)
 		var open := i <= G.unlocked or (i == 11 and G.chapter11_open())
@@ -60,11 +60,6 @@ func _ready() -> void:
 func _cheat_options() -> Array:
 	return [
 		["Unlock all chapters", func():
-			G.unlocked = 10
-			G.after = false],
-		["Unlock “After”", func():
-			for i in range(1, 11):
-				G.completed[str(i)] = true
 			G.unlocked = 10
 			G.after = false],
 		["Changed world: " + ("ON" if G.after else "OFF"), func():
