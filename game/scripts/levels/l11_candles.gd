@@ -18,7 +18,15 @@ const WARN_TIME := 1.6
 const SWEEP_TIME := 1.8
 const POS := [Vector2(110, 830), Vector2(230, 900), Vector2(350, 840), Vector2(470, 910), Vector2(590, 850),
 	Vector2(150, 1010), Vector2(290, 1060), Vector2(430, 1030), Vector2(570, 1080), Vector2(240, 1170)]
-const PHONE := Vector2(560, 1190)
+const PHONE := Vector2(540, 810)
+const T_CALL := 1.5
+const T_BEEP := 10.5
+const T_MSG := 11.0
+const T_END := 17.0
+const T_WALK := 17.8
+const T_FLY := 22.5
+const T_GONE := 25.2
+var call_text := ""
 
 func setup() -> void:
 	for p in POS:
@@ -61,13 +69,31 @@ func tick(dt: float) -> void:
 		gust = -1.0
 		dark_t += dt
 		curtain = lerpf(curtain, 0.6 + 0.3 * sin(t * 1.3), dt * 2.0)
-		wind_snd.volume_db = lerpf(wind_snd.volume_db, -14.0, dt)
-		if before < 9.0 and dark_t >= 9.0:
+		if before == 0.0:
+			var tw := create_tween()
+			tw.tween_property(G.music, "volume_db", -18.0, 2.0)
+		for rt in [T_CALL, T_CALL + 3.0, T_CALL + 6.0]:
+			if before < rt and dark_t >= rt:
+				G.sfx("ring", -4)
+				call_text = "Calling Dad..."
+		if before < T_BEEP and dark_t >= T_BEEP:
+			G.sfx("vm_beep", -8)
+			call_text = "Dad — voicemail"
+		if before < T_MSG and dark_t >= T_MSG:
+			G.play_voice("x_call")
+			hint("Dad? It's me. I... I need you.\nPlease call me back.", 6.0)
+		if before < T_END and dark_t >= T_END:
+			call_text = "Call ended"
+		if before < T_FLY and dark_t >= T_FLY:
+			G.play_voice("x_fly")
+			hint("Fly away, little wren.", 2.6)
+		if before < T_GONE and dark_t >= T_GONE:
 			G.sfx("whoosh", -2, 0.5)
 			G.fade_song(1.0)
-		if dark_t > 9.0:
 			wind_snd.volume_db = -60.0
-		if dark_t > 12.0:
+		elif dark_t < T_GONE:
+			wind_snd.volume_db = lerpf(wind_snd.volume_db, -14.0, dt)
+		if dark_t > T_GONE + 3.5:
 			finish(0.2)
 		return
 	gust_t -= dt
@@ -113,9 +139,7 @@ func tick(dt: float) -> void:
 				G.sfx("puff", -4)
 
 func on_press(p: Vector2) -> void:
-	if p.distance_to(PHONE) < 50:
-		phone_msg = 3.0
-		G.sfx("tap", -10)
+	pass
 
 func _draw() -> void:
 	var n := lit()
@@ -173,10 +197,12 @@ func _draw() -> void:
 			draw_colored_polygon(PackedVector2Array([hp + Vector2(0, -44), hp + Vector2(side * 16, -30), hp + Vector2(side * 18, 30), hp + Vector2(0, 40), hp + Vector2(-side * 8, 0)]), Color(0.08, 0.05, 0.04))
 			draw_line(hp + Vector2(-side * 6, -40), hp + Vector2(-side * 8, 30), Color(1, 0.65, 0.3, 0.6), 2)
 	# phone
-	draw_rect(Rect2(PHONE - Vector2(36, 14), Vector2(72, 28)), Color(0.06, 0.06, 0.07))
-	if phone_msg > 0:
-		glow(PHONE, 90, Color(0.5, 0.65, 1, 0.5))
-		text(PHONE + Vector2(-200, -40), "No contacts.", 26, Color(0.75, 0.82, 1, clampf(phone_msg, 0.0, 1.0)), HORIZONTAL_ALIGNMENT_CENTER, 400)
+	draw_rect(Rect2(PHONE - Vector2(14, 24), Vector2(28, 48)), Color(0.06, 0.06, 0.07))
+	if n == 0 and dark_t >= T_CALL and dark_t < T_END + 1.5:
+		var a := 1.0 if dark_t < T_END else clampf(T_END + 1.5 - dark_t, 0.0, 1.0)
+		glow(PHONE, 110, Color(0.5, 0.65, 1, 0.55 * a))
+		draw_rect(Rect2(PHONE - Vector2(11, 20), Vector2(22, 40)), Color(0.55, 0.7, 1, 0.9 * a))
+		text(PHONE + Vector2(-200, -50), call_text, 24, Color(0.78, 0.85, 1, a), HORIZONTAL_ALIGNMENT_CENTER, 400)
 	# Wren
 	if n > 0:
 		person(Vector2(360, 760), 220, Color(0, 0, 0), 0, true)
@@ -185,10 +211,14 @@ func _draw() -> void:
 		var k := clampf(dark_t / 3.0, 0.0, 1.0)
 		draw_colored_polygon(PackedVector2Array([Vector2(470, 590), Vector2(690, 590), Vector2(560, 1280), Vector2(120, 1280)]), Color(0.6, 0.68, 0.85, 0.08 * k))
 		glow(Vector2(580, 400), 260, Color(0.7, 0.78, 0.95, 0.35 * k))
-		var w := clampf((dark_t - 2.0) / 4.0, 0.0, 1.0)
+		var w := clampf((dark_t - T_WALK) / 4.0, 0.0, 1.0)
 		var feet := Vector2(360, 760).lerp(Vector2(580, 592), ease(w, -1.6))
 		var hgt := lerpf(220.0, 165.0, w)
-		if dark_t < 9.0:
-			person(feet, hgt, Color(0.01, 0.01, 0.015), 0, true)
-		if dark_t >= 9.0:
-			draw_rect(Rect2(0, 0, 720, 1280), Color(0, 0, 0, clampf((dark_t - 9.0) * 2.0, 0.0, 1.0)))
+		var pose := 1 if (dark_t >= T_CALL and dark_t < T_END) else 0
+		if dark_t < T_GONE - 0.35:
+			person(feet, hgt, Color(0.01, 0.01, 0.015), pose, true)
+		elif dark_t < T_GONE:
+			var k2 := (dark_t - (T_GONE - 0.35)) / 0.35
+			person(feet + Vector2(40 * k2, -30 * k2), hgt * (1.0 - 0.3 * k2), Color(0.01, 0.01, 0.015, 1.0 - k2), 0, true)
+		if dark_t >= T_GONE:
+			draw_rect(Rect2(0, 0, 720, 1280), Color(0, 0, 0, 1.0))

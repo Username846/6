@@ -189,6 +189,7 @@ func _say(ln: Dictionary) -> void:
 	box.visible = true
 	name_l.text = ln["who"]
 	full_text = ln["text"]
+	text_l.add_theme_font_size_override("font_size", 32 if full_text.length() < 110 else 25)
 	text_l.text = ""
 	typing = 0.0
 	var dur := G.play_voice(ln["voice"])

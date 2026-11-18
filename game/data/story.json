@@ -652,12 +652,6 @@
        "text": "Hello?",
        "sms": false,
        "voice": "c11_i0_0"
-      },
-      {
-       "who": "Wren",
-       "text": "No contacts.",
-       "sms": true,
-       "voice": ""
       }
      ],
      "amb": "hum"
@@ -666,15 +660,21 @@
    "outro": [
     {
      "img": "c11_window",
+     "amb": "wind",
      "lines": [
       {
        "who": "Dad",
        "text": "Missed call. 11:48 PM.",
        "sms": true,
        "voice": ""
+      },
+      {
+       "who": "Dad (voicemail)",
+       "text": "Hey, kiddo. It's Dad. Sorry I missed you. Things have been... hard. At work. Real hard. I've been, uh... I'll call you tomorrow. Okay? I'm sorry. I love you, kiddo.",
+       "sms": false,
+       "voice": "c11_vm"
       }
-     ],
-     "amb": "wind"
+     ]
     }
    ]
   }
