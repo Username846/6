@@ -9,6 +9,8 @@ var erase_armed := 0.0
 var erase_btn: Label
 var cheat_panel: Control = null
 var cheat_rows: Array = []
+var top_taps := 0
+var bottom_taps := 0
 
 func _ready() -> void:
 	size = Vector2(720, 1280)
@@ -59,9 +61,6 @@ func _ready() -> void:
 		erase_btn.position = Vector2(0, 1210)
 		erase_btn.size = Vector2(720, 50)
 		add_child(erase_btn)
-	if G.cheat_count >= 3:
-		G.cheat_count = 0
-		_open_cheats()
 
 func _cheat_options() -> Array:
 	return [
@@ -147,6 +146,22 @@ func _input(e: InputEvent) -> void:
 				_pick_cheat(cr)
 				return
 		return
+	# secret: 3 taps at the very top, then 3 taps at the very bottom
+	if p.y < 150:
+		if bottom_taps > 0:
+			top_taps = 0
+			bottom_taps = 0
+		top_taps += 1
+		return
+	if p.y > 1190 and top_taps >= 3:
+		bottom_taps += 1
+		if bottom_taps >= 3:
+			top_taps = 0
+			bottom_taps = 0
+			_open_cheats()
+		return
+	top_taps = 0
+	bottom_taps = 0
 	for r in rows:
 		if Rect2(r.position, r.size).has_point(p):
 			if r.get_meta("open"):

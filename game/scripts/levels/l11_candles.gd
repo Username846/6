@@ -56,10 +56,19 @@ func tick(dt: float) -> void:
 	var n := lit()
 	objective("Flames left: %d" % n if n > 0 else "")
 	if n == 0:
+		var before := dark_t
+		warn = -1.0
+		gust = -1.0
 		dark_t += dt
-		wind_snd.volume_db = lerpf(wind_snd.volume_db, -40.0, dt)
-		if dark_t > 5.0:
-			finish(0.5)
+		curtain = lerpf(curtain, 0.6 + 0.3 * sin(t * 1.3), dt * 2.0)
+		wind_snd.volume_db = lerpf(wind_snd.volume_db, -14.0, dt)
+		if before < 9.0 and dark_t >= 9.0:
+			G.sfx("whoosh", -2, 0.5)
+			G.fade_song(1.0)
+		if dark_t > 9.0:
+			wind_snd.volume_db = -60.0
+		if dark_t > 12.0:
+			finish(0.2)
 		return
 	gust_t -= dt
 	if warn < 0 and gust < 0 and gust_t <= 0:
@@ -168,5 +177,18 @@ func _draw() -> void:
 	if phone_msg > 0:
 		glow(PHONE, 90, Color(0.5, 0.65, 1, 0.5))
 		text(PHONE + Vector2(-200, -40), "No contacts.", 26, Color(0.75, 0.82, 1, clampf(phone_msg, 0.0, 1.0)), HORIZONTAL_ALIGNMENT_CENTER, 400)
-	# Wren, sitting with the flames
-	person(Vector2(360, 760), 220, Color(0, 0, 0), 0, true)
+	# Wren
+	if n > 0:
+		person(Vector2(360, 760), 220, Color(0, 0, 0), 0, true)
+	else:
+		# moonlight falls in; Wren gets up and goes to the open window
+		var k := clampf(dark_t / 3.0, 0.0, 1.0)
+		draw_colored_polygon(PackedVector2Array([Vector2(470, 590), Vector2(690, 590), Vector2(560, 1280), Vector2(120, 1280)]), Color(0.6, 0.68, 0.85, 0.08 * k))
+		glow(Vector2(580, 400), 260, Color(0.7, 0.78, 0.95, 0.35 * k))
+		var w := clampf((dark_t - 2.0) / 4.0, 0.0, 1.0)
+		var feet := Vector2(360, 760).lerp(Vector2(580, 592), ease(w, -1.6))
+		var hgt := lerpf(220.0, 165.0, w)
+		if dark_t < 9.0:
+			person(feet, hgt, Color(0.01, 0.01, 0.015), 0, true)
+		if dark_t >= 9.0:
+			draw_rect(Rect2(0, 0, 720, 1280), Color(0, 0, 0, clampf((dark_t - 9.0) * 2.0, 0.0, 1.0)))

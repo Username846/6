@@ -151,7 +151,9 @@ func _panel(p: Dictionary) -> void:
 		if G.after and ln["who"] == "Wren":
 			continue
 		shown += 1
-		if ln["sms"]:
+		if ln["who"] == "":
+			await _caption(ln)
+		elif ln["sms"]:
 			await _sms(ln)
 		else:
 			await _say(ln)
@@ -165,6 +167,21 @@ func _panel(p: Dictionary) -> void:
 	var tw2 := create_tween()
 	tw2.tween_property(img, "modulate:a", 0.0, 0.6)
 	await tw2.finished
+
+func _caption(ln: Dictionary) -> void:
+	box.visible = false
+	var c := G.label(ln["text"], 40, Color(0.85, 0.85, 0.88))
+	c.position = Vector2(0, 560)
+	c.size = Vector2(720, 120)
+	c.modulate.a = 0.0
+	add_child(c)
+	var tw := create_tween()
+	tw.tween_property(c, "modulate:a", 1.0, 2.5)
+	await _wait(7.0)
+	var tw2 := create_tween()
+	tw2.tween_property(c, "modulate:a", 0.0, 1.5)
+	await tw2.finished
+	c.queue_free()
 
 func _say(ln: Dictionary) -> void:
 	sms_l.visible = false

@@ -29,7 +29,7 @@ func setup() -> void:
 		var idx: Array = []
 		for p in s[2]:
 			idx.append(stars.size())
-			stars.append({"p": s[1] + p, "b": rng.randf_range(0.85, 1.0), "r": rng.randf_range(2.6, 3.4)})
+			stars.append({"p": s[1] + p, "b": rng.randf_range(0.85, 1.0), "r": rng.randf_range(6.0, 7.5)})
 		var edges: Array = []
 		for e in s[3]:
 			edges.append(_key(idx[e[0]], idx[e[1]]))
@@ -37,7 +37,7 @@ func setup() -> void:
 	# secret faint triangle near bottom-left, not on any chart
 	for p in [Vector2(62, 1168), Vector2(118, 1132), Vector2(104, 1210)]:
 		secret_idx.append(stars.size())
-		stars.append({"p": p, "b": 0.42, "r": 1.6})
+		stars.append({"p": p, "b": 0.5, "r": 3.2})
 	var tries := 0
 	while stars.size() < 150 and tries < 3000:
 		tries += 1
@@ -48,7 +48,7 @@ func setup() -> void:
 				ok = false
 				break
 		if ok:
-			stars.append({"p": p, "b": rng.randf_range(0.35, 0.95), "r": rng.randf_range(1.0, 3.0)})
+			stars.append({"p": p, "b": rng.randf_range(0.3, 0.85), "r": rng.randf_range(1.5, 4.5)})
 	for i in 5:
 		clouds.append(Vector3(rng.randf_range(-200, 700), rng.randf_range(250, 1150), rng.randf_range(10, 22)))
 	hint("Remember the shape.\nDrag from star to star to draw it.", 5.0)
@@ -64,17 +64,19 @@ func _is_target(i: int) -> bool:
 			return true
 	return false
 
-func nearest(p: Vector2, tr := 70.0) -> int:
-	## Stars of the current constellation snap from far away; others need a close touch.
+func nearest(p: Vector2, tr := 80.0) -> int:
+	## Only the current constellation's stars (and the faint ones) can be connected.
 	var best := -1
 	var bd := INF
 	for i in stars.size():
-		var d: float = stars[i]["p"].distance_to(p)
-		var r := 22.0
+		var r := 0.0
 		if _is_target(i):
 			r = tr
 		elif secret_idx.has(i):
-			r = 40.0
+			r = 45.0
+		else:
+			continue
+		var d: float = stars[i]["p"].distance_to(p)
 		if d < r and d / r < bd:
 			bd = d / r
 			best = i
@@ -98,27 +100,30 @@ func on_press(p: Vector2) -> void:
 	chain = nearest(p)
 
 func on_drag(p: Vector2, _r: Vector2) -> void:
-	if chain < 0 or cur >= cons.size():
+	if cur >= cons.size():
 		return
-	var n := nearest(p, 48.0)
+	if chain < 0:
+		chain = nearest(p)
+		return
+	var n := nearest(p, 62.0)
 	if n >= 0 and n != chain:
-		_try_edge(chain, n)
-		chain = n
+		if _try_edge(chain, n):
+			chain = n
 
 func on_release(_p: Vector2) -> void:
 	chain = -1
 
-func _try_edge(a: int, b: int) -> void:
+func _try_edge(a: int, b: int) -> bool:
 	var k := _key(a, b)
 	if made.has(k) or secret_edges.has(k):
-		return
+		return true
 	if secret_idx.has(a) and secret_idx.has(b):
 		secret_edges.append(k)
 		G.sfx("tap", -10, 0.8)
 		if secret_edges.size() >= 3 and not secret_done:
 			secret_done = true
 			secret()
-		return
+		return true
 	if cons[cur]["edges"].has(k):
 		made.append(k)
 		G.sfx("tap", -6, 1.0 + made.size() * 0.08)
@@ -133,13 +138,18 @@ func _try_edge(a: int, b: int) -> void:
 				finish(3.0)
 			else:
 				ghost_t = 3.5
+			return false
+		return true
 	else:
+		if k == bad_edge and bad_t > -0.6:
+			return false
 		bad_edge = k
 		bad_t = 0.5
 		mistakes += 1
 		G.sfx("bad", -14)
 		if mistakes % 2 == 0:
 			ghost_t = 2.5
+		return false
 
 func _draw() -> void:
 	grad_rect(Rect2(0, 0, 720, 1280), Color(0.01, 0.015, 0.05), Color(0.05, 0.07, 0.17))
@@ -152,7 +162,7 @@ func _draw() -> void:
 		var c := Color(1, 1, 0.95, s["b"] * tw)
 		draw_circle(s["p"], s["r"], c)
 		if s["r"] > 2.5:
-			draw_circle(s["p"], s["r"] * 2.8, Color(0.8, 0.85, 1, 0.08 * tw))
+			draw_circle(s["p"], s["r"] * 2.4, Color(0.8, 0.85, 1, 0.08 * tw))
 	for e in done_edges:
 		draw_line(stars[e.x]["p"], stars[e.y]["p"], Color(1, 0.85, 0.5, 0.55), 2)
 	for e in made:
